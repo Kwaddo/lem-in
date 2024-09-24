@@ -45,7 +45,7 @@ func (graph *Graph) ParseInput(filename string) (int, []Room, error) {
 		return 0, []Room{}, fmt.Errorf("please enter number of ants")
 	}
 
-	if ants > 1000 {
+	if ants > 1000 || ants < 1 {
 		return 0, []Room{}, fmt.Errorf("please enter number of ants [ 1 - 1000 ]")
 	}
 
@@ -141,7 +141,7 @@ func ParseRoom(line string) (Room, error) {
 	y, err := strconv.Atoi(room[2])
 	if err != nil {
 		return Room{}, err
-	}
+	} 
 	name := room[0]
 
 	return Room{name: name, x: x, y: y}, nil
