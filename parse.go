@@ -65,9 +65,13 @@ func (graph *Graph) ParseInput(filename string) (int, []Room, error) {
 				}
 				continue
 			}
-
 		} else if strings.Contains(lines[i], "-") {
+			negChecker := strings.Split(lines[i], " ")
+			if len(negChecker) > 1 {
+				return 0, []Room{}, fmt.Errorf("error: invalid input")
+			}
 			parts := strings.Split(lines[i], "-")
+			fmt.Println(parts)
 			if len(parts) > 2 {
 				return 0, []Room{}, fmt.Errorf("error: invalid input")
 			}
