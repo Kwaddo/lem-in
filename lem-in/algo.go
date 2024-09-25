@@ -1,30 +1,37 @@
 package lemin
 
 import (
-	"fmt"
 	"math"
+	"sort"
 )
 
-func (graph *Graph) FindPaths(rooms []Room) map[string]float64 {
-	paths := make(map[string]float64)
+type Path struct {
+	Rooms    []string 
+	Distance float64 
+}
+
+func (graph *Graph) FindPaths(rooms []Room) []Path {
+	paths := []Path{} 
 	visited := make(map[string]bool)
 	roomMap := make(map[string]Room)
 	for _, room := range rooms {
 		roomMap[room.name] = room
 	}
-	DFS(graph, roomMap, visited, graph.start, []string{}, 0, paths)
+	DFS(graph, roomMap, visited, graph.start, []string{}, 0, &paths)
+	sort.Slice(paths, func(i, j int) bool {
+		return paths[i].Distance < paths[j].Distance
+	})
 	return paths
 }
 
-func DFS(graph *Graph, mapRoom map[string]Room, visited map[string]bool, currentRoom string, path []string, totalDistance float64, paths map[string]float64) {
+func DFS(graph *Graph, mapRoom map[string]Room, visited map[string]bool, currentRoom string, path []string, totalDistance float64, paths *[]Path) {
 	if visited[currentRoom] {
 		return
 	}
 	visited[currentRoom] = true
 	path = append(path, currentRoom)
 	if currentRoom == graph.end {
-		jpaths := fmt.Sprintf("%v", path)
-		paths[jpaths] = totalDistance
+		*paths = append(*paths, Path{Rooms: append([]string{}, path...), Distance: totalDistance})
 	} else {
 		for _, connectedRoom := range graph.nodes[currentRoom] {
 			dist := ReturnDistance(mapRoom[currentRoom], mapRoom[connectedRoom])

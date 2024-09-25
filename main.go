@@ -1,10 +1,9 @@
 package main
 
 import (
-	"os"
-	li "lemin/lem-in"
 	"fmt"
-
+	li "lemin/lem-in"
+	"os"
 )
 
 func main() {
@@ -25,12 +24,7 @@ func main() {
 	fmt.Println(graph)
 	fmt.Println(rooms)
 	paths := graph.FindPaths(rooms)
-
-	// Sort the paths by distance.
-	// sortedPaths := li.SortPaths(paths)
-
-	// Output the sorted paths and their distances.
-	for p, d := range paths {
-		fmt.Printf("Path: %s, Distance: %.5f\n", p, d)
+	for _, path := range paths {
+		fmt.Printf("Path: %v, Distance: %.2f\n", path.Rooms, path.Distance)
 	}
 }
