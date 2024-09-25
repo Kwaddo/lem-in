@@ -1,4 +1,4 @@
-package main
+package lemin
 
 import (
 	"fmt"
@@ -28,7 +28,7 @@ func (graph *Graph) ParseInput(filename string) (int, []Room, error) {
 		return 0, []Room{}, fmt.Errorf("error: File not found, Please enter a valid file name")
 	}
 
-	lines := strings.Split(string(byteData), "\r\n")
+	lines := strings.Split(string(byteData), "\n")
 	if len(lines) < 6 {
 		return 0, []Room{}, fmt.Errorf("error: Invalid file input, Not enough input")
 	}
@@ -149,23 +149,4 @@ func ParseRoom(line string) (Room, error) {
 	name := room[0]
 
 	return Room{name: name, x: x, y: y}, nil
-}
-
-func main() {
-	var graph Graph
-	args := os.Args[1:]
-	if len(args) != 1 {
-		fmt.Println("Please enter a file name")
-		return
-	}
-	ants, rooms, err := graph.ParseInput(args[0])
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-
-	fmt.Println(ants)
-	fmt.Println(graph)
-	fmt.Println(rooms)
-
 }
