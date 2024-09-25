@@ -24,5 +24,13 @@ func main() {
 	fmt.Println(ants)
 	fmt.Println(graph)
 	fmt.Println(rooms)
+	paths := graph.FindPaths(rooms)
 
+	// Sort the paths by distance.
+	// sortedPaths := li.SortPaths(paths)
+
+	// Output the sorted paths and their distances.
+	for p, d := range paths {
+		fmt.Printf("Path: %s, Distance: %.5f\n", p, d)
+	}
 }
