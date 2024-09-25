@@ -28,7 +28,7 @@ func (graph *Graph) ParseInput(filename string) (int, []Room, error) {
 		return 0, []Room{}, fmt.Errorf("error: File not found, Please enter a valid file name")
 	}
 
-	lines := strings.Split(string(byteData), "\n")
+	lines := strings.Split(string(byteData), "\r\n")
 	if len(lines) < 6 {
 		return 0, []Room{}, fmt.Errorf("error: Invalid file input, Not enough input")
 	}
@@ -39,18 +39,29 @@ func (graph *Graph) ParseInput(filename string) (int, []Room, error) {
 	startRoom := ""
 	endRoom := ""
 	graph.nodes = make(map[string][]string)
+	var ants int
+	var index int
 
-	ants, err := strconv.Atoi(lines[0])
-	if err != nil {
-		return 0, []Room{}, fmt.Errorf("please enter number of ants")
+	for i := 0; i < len(lines); i++ {
+		if lines[i] != "" {
+			ants, err = strconv.Atoi(lines[i])
+			if err != nil {
+				return 0, []Room{}, fmt.Errorf("please enter number of ants")
+			}
+
+			index = i + 1
+
+			if ants > 1000 || ants < 1 {
+				return 0, []Room{}, fmt.Errorf("please enter number of ants [ 1 - 1000 ]")
+			}
+			break
+		}
 	}
 
-	if ants > 1000 || ants < 1 {
-		return 0, []Room{}, fmt.Errorf("please enter number of ants [ 1 - 1000 ]")
-	}
-
-	for i := 1; i < len(lines); i++ {
-		if strings.HasPrefix(lines[i], "##") {
+	for i := index; i < len(lines); i++ {
+		if lines[i] == "" {
+			continue
+		} else if strings.HasPrefix(lines[i], "##") {
 			if i+1 < len(lines) {
 				if lines[i] == "##start" && !start {
 					start = true
@@ -65,6 +76,8 @@ func (graph *Graph) ParseInput(filename string) (int, []Room, error) {
 				}
 				continue
 			}
+		} else if strings.HasPrefix(lines[i], "#") {
+			continue
 		} else if strings.Contains(lines[i], "-") {
 			negChecker := strings.Split(lines[i], " ")
 			if len(negChecker) > 1 {
@@ -77,7 +90,15 @@ func (graph *Graph) ParseInput(filename string) (int, []Room, error) {
 			}
 			graph.nodes[parts[0]] = append(graph.nodes[parts[0]], parts[1])
 			graph.nodes[parts[1]] = append(graph.nodes[parts[1]], parts[0])
-			continue
+			for _, arr := range graph.nodes {
+				for i := 0; i < len(arr); i++ {
+					for j := i+1; j < len(arr); j++ {
+						if arr[i] == arr[j] {
+							return 0, []Room{}, fmt.Errorf("error: duplicated room connections")
+						}
+					}
+				}
+			}
 		} else {
 			room, err := ParseRoom(lines[i])
 			if err != nil {
@@ -125,6 +146,7 @@ func (graph *Graph) ParseInput(filename string) (int, []Room, error) {
 		}
 	}
 
+	fmt.Println(graph.nodes)
 	if !start || !end {
 		return 0, []Room{}, fmt.Errorf("error: ##start OR ##end flag was not found")
 	}
@@ -145,7 +167,7 @@ func ParseRoom(line string) (Room, error) {
 	y, err := strconv.Atoi(room[2])
 	if err != nil {
 		return Room{}, err
-	} 
+	}
 	name := room[0]
 
 	return Room{name: name, x: x, y: y}, nil
