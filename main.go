@@ -24,7 +24,12 @@ func main() {
 	fmt.Println(graph)
 	fmt.Println(rooms)
 	paths := graph.FindPaths(rooms)
+	
 	for _, path := range paths {
-		fmt.Printf("Path: %v, Distance: %.2f\n", path.Rooms, path.Distance)
+		fmt.Printf("Path: %v, Distance: %.12f\n", path.Rooms, path.Distance)
+	}
+	a := graph.MoveAnts(ants, paths)
+	for _, b := range a {
+		fmt.Println(b)
 	}
 }
