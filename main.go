@@ -10,7 +10,7 @@ func main() {
 	var graph li.Graph
 	args := os.Args[1:]
 	if len(args) != 1 {
-		fmt.Println("Please enter a file name")
+		fmt.Print("\nERROR: Invalid number of arguments\n\nUSAGE: go run main.go [INPUT FILENAME]\n")
 		return
 	}
 	fmt.Println(args[0])
