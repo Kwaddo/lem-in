@@ -82,10 +82,10 @@ func (graph *Graph) ParseInput(filename string) (int, []Room, error) {
 				} else if lines[i] == "##end" && !end && start {
 					end = true
 					endRoomArr = strings.Split(lines[i+1], " ")
-					if len(startRoomArr) != 3 {
+					if len(endRoomArr) != 3 {
 						for j := i+2; j < len(lines); j++ {
-							startRoomArr = strings.Split(lines[j], " ")
-							if len(startRoomArr) != 3 {
+							endRoomArr = strings.Split(lines[j], " ")
+							if len(endRoomArr) != 3 {
 								continue
 							} else {
 								break
