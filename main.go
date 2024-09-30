@@ -28,8 +28,5 @@ func main() {
 	for _, path := range paths {
 		fmt.Printf("Path: %v, Distance: %.12f\n", path.Rooms, path.Distance)
 	}
-	a := graph.MoveAnts(ants, paths)
-	for _, b := range a {
-		fmt.Println(b)
-	}
+	graph.MoveAnts(ants, paths)
 }

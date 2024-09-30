@@ -28,7 +28,7 @@ func (graph *Graph) ParseInput(filename string) (int, []Room, error) {
 		return 0, []Room{}, fmt.Errorf("ERROR: File Not Found, Please enter a valid file name")
 	}
 
-	lines := strings.Split(string(byteData), "\r\n")
+	lines := strings.Split(string(byteData), "\n")
 	if len(lines) < 6 {
 		return 0, []Room{}, fmt.Errorf("ERROR: Invalid input, Not enough input")
 	}

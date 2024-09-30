@@ -1,14 +1,15 @@
 package lemin
 
 import (
+	"fmt"
 	"strconv"
 	"strings"
 )
 
-var antMovement []string
+// var antMovement []string
 
 // MoveAnts simulates the movement of ants across the given paths.
-func (graph *Graph) MoveAnts(antAmount int, paths []Path) []string {
+func (graph *Graph) MoveAnts(antAmount int, paths []Path) {
 	// Track the position of each ant (initially all ants are at the start)
 	antPositions := make([]int, antAmount)
 	// Track which path each ant is assigned to
@@ -21,9 +22,9 @@ func (graph *Graph) MoveAnts(antAmount int, paths []Path) []string {
 	// Assign ants to paths in a round-robin fashion
 	for i := 0; i < antAmount; i++ {
 		antPaths[i] = i % len(paths)
-        if i == antAmount-1 && len(paths) < 3 {
-            antPaths[i] = 0
-        }
+		if i == antAmount-1 && len(paths) < 3 {
+			antPaths[i] = 0
+		}
 	}
 
 	totalFinished := 0
@@ -71,9 +72,9 @@ func (graph *Graph) MoveAnts(antAmount int, paths []Path) []string {
 
 		// Print the current step movement
 		if len(movement) > 0 {
-			antMovement = append(antMovement, strings.Join(movement, " "))
+			fmt.Printf("%s\n", strings.Trim(fmt.Sprint(movement), "[]"))
 		}
-	}
 
-	return antMovement
+		// return antMovement
+	}
 }
