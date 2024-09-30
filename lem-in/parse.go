@@ -28,7 +28,7 @@ func (graph *Graph) ParseInput(filename string) (int, []Room, error) {
 		return 0, []Room{}, fmt.Errorf("ERROR: File Not Found, Please enter a valid file name")
 	}
 
-	lines := strings.Split(string(byteData), "\n")
+	lines := strings.Split(string(byteData), "\r\n")
 	if len(lines) < 6 {
 		return 0, []Room{}, fmt.Errorf("ERROR: Invalid input, Not enough input")
 	}
@@ -36,8 +36,8 @@ func (graph *Graph) ParseInput(filename string) (int, []Room, error) {
 	start := false
 	end := false
 	var rooms []Room
-	startRoom := ""
-	endRoom := ""
+	startRoomArr := []string{}
+	endRoomArr := []string{}
 	graph.nodes = make(map[string][]string)
 	var ants int
 	var index int
@@ -52,8 +52,8 @@ func (graph *Graph) ParseInput(filename string) (int, []Room, error) {
 
 			index = i + 1
 
-			if ants > 1000 || ants < 1 {
-				return 0, []Room{}, fmt.Errorf("ERROR AT LINE %v: Invalid input, Enter number of ants [ 1 - 1000 ]", line)
+			if ants > 500000 || ants < 1 {
+				return 0, []Room{}, fmt.Errorf("ERROR AT LINE %v: Invalid input, Enter number of ants [ 1 - 500000 ]", line)
 			}
 			break
 		}
@@ -67,12 +67,32 @@ func (graph *Graph) ParseInput(filename string) (int, []Room, error) {
 			if i+1 < len(lines) {
 				if lines[i] == "##start" && !start {
 					start = true
-					startRoom = strings.Split(lines[i+1], " ")[0]
-					graph.start = startRoom
-				} else if lines[i] == "##end" && !end {
+					startRoomArr = strings.Split(lines[i+1], " ")
+					if len(startRoomArr) != 3 {
+						for j := i+2; j < len(lines); j++ {
+							startRoomArr = strings.Split(lines[j], " ")
+							if len(startRoomArr) != 3 {
+								continue
+							} else {
+								break
+							}
+						}
+					}
+					graph.start = startRoomArr[0]
+				} else if lines[i] == "##end" && !end && start {
 					end = true
-					endRoom = strings.Split(lines[i+1], " ")[0]
-					graph.end = endRoom
+					endRoomArr = strings.Split(lines[i+1], " ")
+					if len(startRoomArr) != 3 {
+						for j := i+2; j < len(lines); j++ {
+							startRoomArr = strings.Split(lines[j], " ")
+							if len(startRoomArr) != 3 {
+								continue
+							} else {
+								break
+							}
+						}
+					}
+					graph.end = endRoomArr[0]
 				} else if lines[i] == "##start" && start {
 					return 0, []Room{}, fmt.Errorf("ERROR AT LINE %v: Invalid Input, Redundant ##start flag", line)
 				} else if lines[i] == "##end" && end {
