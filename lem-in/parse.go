@@ -22,26 +22,22 @@ func (graph *Graph) ParseInput(filename string) (int, []Room, error) {
 	if !(strings.HasSuffix(filename, ".txt")) {
 		return 0, []Room{}, fmt.Errorf("ERROR: Invalid File Extension, Should be [.txt] file")
 	}
-
 	byteData, err := os.ReadFile(filename)
 	if err != nil {
 		return 0, []Room{}, fmt.Errorf("ERROR: File Not Found, Please enter a valid file name")
 	}
-
 	lines := strings.Split(string(byteData), "\n")
 	if len(lines) < 6 {
 		return 0, []Room{}, fmt.Errorf("ERROR: Invalid input, Not enough input")
 	}
-
 	start := false
 	end := false
 	var rooms []Room
-	startRoomArr := []string{}
-	endRoomArr := []string{}
+	var startRoomArr []string
+	var endRoomArr []string
 	graph.nodes = make(map[string][]string)
 	var ants int
 	var index int
-
 	for i := 0; i < len(lines); i++ {
 		line := i+1
 		if lines[i] != "" {
@@ -52,13 +48,12 @@ func (graph *Graph) ParseInput(filename string) (int, []Room, error) {
 
 			index = i + 1
 
-			if ants > 500000 || ants < 1 {
+			if ants > 5000000 || ants < 1 {
 				return 0, []Room{}, fmt.Errorf("ERROR AT LINE %v: Invalid input, Enter number of ants [ 1 - 500000 ]", line)
 			}
 			break
 		}
 	}
-
 	for i := index; i < len(lines); i++ {
 		line := i+1
 		if lines[i] == "" {
@@ -151,7 +146,6 @@ func (graph *Graph) ParseInput(filename string) (int, []Room, error) {
 			rooms = append(rooms, room)
 		}
 	}
-
 	found := false
 	var unconnected Room
 	for _, room := range rooms {
@@ -168,7 +162,6 @@ func (graph *Graph) ParseInput(filename string) (int, []Room, error) {
 			return 0, []Room{}, fmt.Errorf("ERROR: Invalid input, Room %v is Unconnected", unconnected)
 		}
 	}
-
 	notEx := ""
 	for k := range graph.nodes {
 		for _, room := range rooms {
@@ -184,7 +177,6 @@ func (graph *Graph) ParseInput(filename string) (int, []Room, error) {
 			return 0, []Room{}, fmt.Errorf("ERROR: Invalid input, Room [%v] connected and does not exist", notEx)
 		}
 	}
-
 	for i := 0; i < len(rooms); i++ {
 		for j := i + 1; j < len(rooms); j++ {
 			if rooms[i].x == rooms[j].x && rooms[i].y == rooms[j].y {
@@ -194,16 +186,13 @@ func (graph *Graph) ParseInput(filename string) (int, []Room, error) {
 			}
 		}
 	}
-
 	fmt.Println(graph.nodes)
 	if !start {
 		return 0, []Room{}, fmt.Errorf("ERROR: Invalid input, ##start is missing")
 	} else if !end {
 		return 0, []Room{}, fmt.Errorf("ERROR: Invalid input, ##end is missing")
 	}
-
 	return ants, rooms, nil
-
 }
 
 func ParseRoom(line string) (Room, error) {
@@ -220,6 +209,5 @@ func ParseRoom(line string) (Room, error) {
 		return Room{}, err
 	}
 	name := room[0]
-
 	return Room{name: name, x: x, y: y}, nil
 }

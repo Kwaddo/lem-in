@@ -56,35 +56,19 @@ func ReturnDistance(a, b Room) float64 {
 func ValidatePaths(paths []Path) []Path {
     uniquePaths := []Path{}
     roomUsage := make(map[string]int)
-
     for _, path := range paths {
         overlapScore := 0
-        totalInternalRooms := len(path.Rooms) - 2 // Exclude start and end
-
-        // Calculate overlap score
-        for _, room := range path.Rooms[1:len(path.Rooms)-1] { // Exclude start and end
+        totalInternalRooms := len(path.Rooms) - 2
+        for _, room := range path.Rooms[1:len(path.Rooms)-1] { 
             overlapScore += roomUsage[room]
         }
-
-        // Calculate overlap ratio
         overlapRatio := float64(overlapScore) / float64(totalInternalRooms)
-
-        // Allow paths with overlap ratio between 0.1 and 0.5
-		count := 0.0
-		if len(paths) > 15 {
-			count = 0.35
-		} else {
-			count = 0.55
-		}
-        if overlapRatio <= count {
+        if overlapRatio <= 0.3 {
             uniquePaths = append(uniquePaths, path)
-            
-            // Increment usage count for internal rooms in this path
             for _, room := range path.Rooms[1:len(path.Rooms)-1] {
                 roomUsage[room]++
             }
         }
     }
-
     return uniquePaths
 }
