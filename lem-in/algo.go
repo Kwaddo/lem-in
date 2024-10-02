@@ -90,5 +90,31 @@ func ValidatePaths(paths []Path) []Path {
             }
         }
     }
-    return uPaths
+    return CullPaths(uPaths)
+}
+
+func CullPaths(paths []Path) []Path {
+    culledPaths := []Path{}
+    for _, path := range paths {
+        shouldAdd := true
+        for _, culledPath := range culledPaths {
+            minLength := len(path.Rooms)
+            if len(culledPath.Rooms) < minLength {
+                minLength = len(culledPath.Rooms)
+            }
+            for i := 1; i < minLength-1; i++ {
+                if path.Rooms[i] == culledPath.Rooms[i] {
+                    shouldAdd = false
+                    break
+                }
+            }
+            if !shouldAdd {
+                break
+            }
+        }
+        if shouldAdd {
+            culledPaths = append(culledPaths, path)
+        }
+    }
+    return culledPaths
 }
