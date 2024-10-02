@@ -7,6 +7,11 @@ import (
 	"strings"
 )
 
+/*
+The idea of the parse is a checker, to see if there are any conflicting connections, any wrong values, any repetitions, and any formats that completely go against
+what should follow through.
+*/
+
 type Graph struct {
 	nodes map[string][]string
 	start string
@@ -186,7 +191,6 @@ func (graph *Graph) ParseInput(filename string) (int, []Room, error) {
 			}
 		}
 	}
-	fmt.Println(graph.nodes)
 	if !start {
 		return 0, []Room{}, fmt.Errorf("ERROR: Invalid input, ##start is missing")
 	} else if !end {

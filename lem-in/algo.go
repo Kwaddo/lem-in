@@ -5,6 +5,26 @@ import (
 	"sort"
 )
 
+/*
+First thing this is set out to make is an array of paths, so that every validated and confirmed path is thrown into it and used accordingly for the antmove
+function. The function FindPaths focuses on finding every possible path, and within it validates the paths if there are three or mnore possible paths
+to begin with since there doesn't need to be any validation if there are only two possible paths.
+
+By using DFS, the given function below, it focuses mainly on returning every possible path with no discrimination. Within it is a function that returns the
+distance between the two rooms, which is in accordance to pythogoreas's theorem. Once all paths are found, they are to be validated.
+
+The ValidatePaths function is a slightly complex algorithm that only keeps paths that do not overlap each other, keeping each of them unique. "uPaths" is the
+Paths struct array that has only the ones that are chosen. "roomUsedCount" is a map that is meant to keep the rooms that are used in their specific places,
+for rememberance that it does not overlap in the future. It checks how many times they are used and keeps a count. A for-loop is made for the paths, to
+check each path accordingly one-by-one.
+
+Within the for-loop is the overlap score, which has the total from "roomUsedCount" so that it can be used soon. The "overlapRatio" focuses on dividing the
+overlap score by the total amount of internal rooms, obviously disregarding the start and end rooms since they do not count. After constant trial and error,
+we found the best ratio for getting only the unique paths to be smaller than or equal to 0.3. This is because within that given path, there are a small amount
+of overlaps and by making the number bigger we are only allowing for more overlaps, so 0.3 is meant to be that sweet spot. Within the if statement, it adds the
+path to "uPaths" and then keeps another for loop to increase the "roomUsedCount". Once all of it is done, it returns the validated paths only.
+*/
+
 type Path struct {
 	Rooms    []string 
 	Distance float64 
@@ -54,21 +74,21 @@ func ReturnDistance(a, b Room) float64 {
 }
 
 func ValidatePaths(paths []Path) []Path {
-    uniquePaths := []Path{}
-    roomUsage := make(map[string]int)
+    uPaths := []Path{}
+    roomUsedCount := make(map[string]int)
     for _, path := range paths {
         overlapScore := 0
         totalInternalRooms := len(path.Rooms) - 2
         for _, room := range path.Rooms[1:len(path.Rooms)-1] { 
-            overlapScore += roomUsage[room]
+            overlapScore += roomUsedCount[room]
         }
         overlapRatio := float64(overlapScore) / float64(totalInternalRooms)
         if overlapRatio <= 0.3 {
-            uniquePaths = append(uniquePaths, path)
+            uPaths = append(uPaths, path)
             for _, room := range path.Rooms[1:len(path.Rooms)-1] {
-                roomUsage[room]++
+                roomUsedCount[room]++
             }
         }
     }
-    return uniquePaths
+    return uPaths
 }
