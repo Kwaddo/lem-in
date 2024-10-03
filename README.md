@@ -36,7 +36,7 @@ To be put into practice:
 3-1
 ```
 
-# Code Explained
+## Code Explained
 
 The idea of the parse is a checker, to see if there are any conflicting connections, any wrong values, any repetitions, and any formats that completely go against what should follow through.
 
