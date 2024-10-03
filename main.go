@@ -6,8 +6,6 @@ import (
 	"os"
 )
 
-// Where it is all coming together.
-
 func main() {
 	var graph li.Graph
 	args := os.Args[1:]
@@ -21,8 +19,5 @@ func main() {
 		return
 	}
 	paths := graph.FindPaths(rooms)
-
-	fmt.Println(paths)
-	
 	li.MoveAnts(ants, paths)
 }
