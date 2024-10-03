@@ -4,7 +4,12 @@ Made by Ali Khalaf, Salman Nader, Ahmed Aburowais, and Moataz Ibrahim. This comp
 
 ## How-To-Use
 
-The format is in accordance to:
+The entire program runs with Go, so with a given IDE you'd want to run the code by typing the following in the terminal:
+```
+go run main.go [INPUTFILENAME.TXT]
+```
+
+There is already a text file called "input.txt" within the folder, but you can use any text file within it. Once you create the text file, the inputs must be according to a strict format. The format is as follows:
 ```
 number_of_ants
 the_rooms
@@ -39,7 +44,11 @@ First thing this is set out to make is an array of paths, so that every validate
 
 By using DFS, the given function below, it focuses mainly on returning every possible path with no discrimination. Within it is a function that returns the distance between the two rooms, which is in accordance to pythogoreas's theorem. Once all paths are found, they are to be validated.
 
-The ValidatePaths function is a slightly complex algorithm that only keeps paths that do not overlap each other, keeping each of them unique. "uPaths" is the Paths struct array that has only the ones that are chosen. "roomUsedCount" is a map that is meant to keep the rooms that are used in their specific places, for rememberance that it does not overlap in the future. It checks how many times they are used and keeps a count. A for-loop is made for the paths, to check each path accordingly one-by-one.
+The ValidatePaths function is a slightly complex algorithm that only keeps paths that do not overlap each other, keeping each of them unique. "uPaths" is the Paths struct array that has only the ones that are chosen. "roomUsedCount" is a map that is meant to keep the rooms that are used in their specific places, for rememberance that it does not overlap in the future. It checks how many times they are used and keeps a count. A for-loop is made for the paths, to check each path accordingly one-by-one. 
+
+Within the for-loop is the overlap score, which has the total from "roomUsedCount" so that it can be used soon. The "overlapRatio" focuses on dividing the overlap score by the total amount of internal rooms, obviously disregarding the start and end rooms since they do not count. After constant trial and error, we found the best ratio for getting only the unique paths to be smaller than or equal to 0.3. This is because within that given path, there are a small amount of overlaps and by making the number bigger we are only allowing for more overlaps, so 0.3 is meant to be that sweet spot. Within the if statement, it adds the path to "uPaths" and then keeps another for loop to increase the "roomUsedCount". Once all of it is done, it returns the validated paths only. This is not where it ends, as the function returns another called CullPaths that gets rid of any conflicting rooms.
+
+After creating a new Paths array, a for-range is made for the inputted paths and within it is a boolean called "shouldAdd" which should indicate if the chosen path should be added or not. The for-range goes through all paths that are found within. Another for-range is made for the culled paths' variable, which starts empty so it instantly goes to the if statement under it and appends the first path regardless. Now, the for-range is useable, so it first creates a new variable called "minLength" that first is made to be the length of the rooms for the paths. Then, an if statement that checks if the length of the rooms of the chosen culled paths is smaller than the length of the chosen path. When the if statement follows through, minLength is changed to be the length of the chosen culled paths in the current for-range. Another for-loop is made, one to compare the rooms of the culled paths and the normal paths. This is to find any conflicting paths, disregarding the first and last room which is why this loop starts at 1 and ends at minLength minus one. Once one is found within the if statement, it will then change the shouldAdd boolean to false and the function will skip adding the path to the culled paths. After all of that is done, it maintains the paths that have not been culled. 
 
 Within the for-loop is the overlap score, which has the total from "roomUsedCount" so that it can be used soon. The "overlapRatio" focuses on dividing the overlap score by the total amount of internal rooms, obviously disregarding the start and end rooms since they do not count. After constant trial and error, we found the best ratio for getting only the unique paths to be smaller than or equal to 0.3. This is because within that given path, there are a small amount of overlaps and by making the number bigger we are only allowing for more overlaps, so 0.3 is meant to be that sweet spot. Within the if statement, it adds the path to "uPaths" and then keeps another for loop to increase the "roomUsedCount". Once all of it is done, it returns the validated paths only.
 
