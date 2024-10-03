@@ -21,6 +21,8 @@ func main() {
 		return
 	}
 	paths := graph.FindPaths(rooms)
+
+	fmt.Println(paths)
 	
 	li.MoveAnts(ants, paths)
 }

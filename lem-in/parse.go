@@ -44,7 +44,7 @@ func (graph *Graph) ParseInput(filename string) (int, []Room, error) {
 	var ants int
 	var index int
 	for i := 0; i < len(lines); i++ {
-		line := i+1
+		line := i + 1
 		if lines[i] != "" {
 			ants, err = strconv.Atoi(lines[i])
 			if err != nil {
@@ -53,14 +53,14 @@ func (graph *Graph) ParseInput(filename string) (int, []Room, error) {
 
 			index = i + 1
 
-			if ants > 5000000 || ants < 1 {
-				return 0, []Room{}, fmt.Errorf("ERROR AT LINE %v: Invalid input, Enter number of ants [ 1 - 500000 ]", line)
+			if ants > 150000 || ants < 1 {
+				return 0, []Room{}, fmt.Errorf("ERROR AT LINE %v: Invalid input, Enter number of ants [ 1 - 150000 ]", line)
 			}
 			break
 		}
 	}
 	for i := index; i < len(lines); i++ {
-		line := i+1
+		line := i + 1
 		if lines[i] == "" {
 			continue
 		} else if strings.HasPrefix(lines[i], "##") {
@@ -69,7 +69,7 @@ func (graph *Graph) ParseInput(filename string) (int, []Room, error) {
 					start = true
 					startRoomArr = strings.Split(lines[i+1], " ")
 					if len(startRoomArr) != 3 {
-						for j := i+2; j < len(lines); j++ {
+						for j := i + 2; j < len(lines); j++ {
 							startRoomArr = strings.Split(lines[j], " ")
 							if len(startRoomArr) != 3 {
 								continue
@@ -83,7 +83,7 @@ func (graph *Graph) ParseInput(filename string) (int, []Room, error) {
 					end = true
 					endRoomArr = strings.Split(lines[i+1], " ")
 					if len(endRoomArr) != 3 {
-						for j := i+2; j < len(lines); j++ {
+						for j := i + 2; j < len(lines); j++ {
 							endRoomArr = strings.Split(lines[j], " ")
 							if len(endRoomArr) != 3 {
 								continue
@@ -132,6 +132,11 @@ func (graph *Graph) ParseInput(filename string) (int, []Room, error) {
 			if len(parts) > 2 {
 				return 0, []Room{}, fmt.Errorf("ERROR AT LINE %v: Invalid input, Only two rooms can be connected", line)
 			}
+
+			if parts[0] == parts[1] {
+				return 0, []Room{}, fmt.Errorf("ERROR AT LINE %v: Invalid input, Room is connected to it self", line)
+			}
+
 			graph.nodes[parts[0]] = append(graph.nodes[parts[0]], parts[1])
 			graph.nodes[parts[1]] = append(graph.nodes[parts[1]], parts[0])
 			for _, arr := range graph.nodes {
