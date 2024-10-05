@@ -38,7 +38,15 @@ To be put into practice:
 
 ## Code Explained
 
-The idea of the parse is a checker, to see if there are any conflicting connections, any wrong values, any repetitions, and any formats that completely go against what should follow through.
+The idea of the parse is a checker, to see if there are any conflicting connections, any wrong values, any repetitions, and any formats that completely go against what should follow through. Here in parsing we will get the ants number and all the room and also the each room and what rooms its connected to, the connections will be saved in graph struct as well as the start room and the end room. as for the rooms they will be saved in the Room struct saving the name and the x and y values of that room. Of course we should check if the file extension is a text file or not, then we take the data from the filename given in the parameter. Then we try to validate the following:
+1) Number of ants can't be zero of above the limit [150,000]
+2) We catch the [##start] and [##end] flags to know the start and end Rooms
+3) We catch the Room connection by seeing if the string has a [ - ] sign in it. and saving the results in graph.nodes
+4) if it catches a comment it continues to the next iteration and ignores it
+5) anything other than that must be an initialization for a room, then we call the ParseRoom Function to parse the room and get the name and the position of it
+6) if there is any errors it appends it to allErrors array and returns it and all the catched errors will be printied in the main function
+
+And of course we had to make the error messages as specific as possible so the user can know exactly where the error is in the input file and fix it.
 
 First thing this is set out to make is an array of paths, so that every validated and confirmed path is thrown into it and used accordingly for the antmove function. The function FindPaths focuses on finding every possible path, and within it validates the paths if there are three or mnore possible paths to begin with since there doesn't need to be any validation if there are only two possible paths.
 
