@@ -5,13 +5,8 @@ import (
 	"sort"
 )
 
-type Path struct {
-	Rooms    []string 
-	Distance float64 
-}
-
 func (graph *Graph) FindPaths(rooms []Room) []Path {
-	paths := []Path{} 
+	paths := []Path{}
 	visited := make(map[string]bool)
 	roomMap := make(map[string]Room)
 	for _, room := range rooms {
@@ -23,7 +18,7 @@ func (graph *Graph) FindPaths(rooms []Room) []Path {
 	})
 	if len(paths) >= 3 {
 		paths = ValidatePaths(paths)
-	} 
+	}
 	return paths
 }
 
@@ -54,47 +49,47 @@ func ReturnDistance(a, b Room) float64 {
 }
 
 func ValidatePaths(paths []Path) []Path {
-    uPaths := []Path{}
-    roomUsedCount := make(map[string]int)
-    for _, path := range paths {
-        overlapScore := 0
-        totalInternalRooms := len(path.Rooms) - 2
-        for _, room := range path.Rooms[1:len(path.Rooms)-1] { 
-            overlapScore += roomUsedCount[room]
-        }
-        overlapRatio := float64(overlapScore) / float64(totalInternalRooms)
-        if overlapRatio <= 0.3 {
-            uPaths = append(uPaths, path)
-            for _, room := range path.Rooms[1:len(path.Rooms)-1] {
-                roomUsedCount[room]++
-            }
-        }
-    }
-    return CullPaths(uPaths)
+	uPaths := []Path{}
+	roomUsedCount := make(map[string]int)
+	for _, path := range paths {
+		overlapScore := 0
+		totalInternalRooms := len(path.Rooms) - 2
+		for _, room := range path.Rooms[1 : len(path.Rooms)-1] {
+			overlapScore += roomUsedCount[room]
+		}
+		overlapRatio := float64(overlapScore) / float64(totalInternalRooms)
+		if overlapRatio <= 0.3 {
+			uPaths = append(uPaths, path)
+			for _, room := range path.Rooms[1 : len(path.Rooms)-1] {
+				roomUsedCount[room]++
+			}
+		}
+	}
+	return CullPaths(uPaths)
 }
 
 func CullPaths(paths []Path) []Path {
-    culledPaths := []Path{}
-    for _, path := range paths {
-        shouldAdd := true
-        for _, culledPath := range culledPaths {
-            minLength := len(path.Rooms)
-            if len(culledPath.Rooms) < minLength {
-                minLength = len(culledPath.Rooms)
-            }
-            for i := 1; i < minLength-1; i++ {
-                if path.Rooms[i] == culledPath.Rooms[i] {
-                    shouldAdd = false
-                    break
-                }
-            }
-            if !shouldAdd {
-                break
-            }
-        }
-        if shouldAdd {
-            culledPaths = append(culledPaths, path)
-        }
-    }
-    return culledPaths
+	culledPaths := []Path{}
+	for _, path := range paths {
+		shouldAdd := true
+		for _, culledPath := range culledPaths {
+			minLength := len(path.Rooms)
+			if len(culledPath.Rooms) < minLength {
+				minLength = len(culledPath.Rooms)
+			}
+			for i := 1; i < minLength-1; i++ {
+				if path.Rooms[i] == culledPath.Rooms[i] {
+					shouldAdd = false
+					break
+				}
+			}
+			if !shouldAdd {
+				break
+			}
+		}
+		if shouldAdd {
+			culledPaths = append(culledPaths, path)
+		}
+	}
+	return culledPaths
 }

@@ -7,17 +7,6 @@ import (
 	"strings"
 )
 
-type Graph struct {
-	nodes map[string][]string
-	start string
-	end   string
-}
-
-type Room struct {
-	name string
-	x, y int
-}
-
 func (graph *Graph) ParseInput(filename string) (int, []Room, []error) {
 	if !(strings.HasSuffix(filename, ".txt")) {
 		return 0, []Room{}, []error{fmt.Errorf("ERROR: Invalid File Extension, Should be [.txt] file")}
