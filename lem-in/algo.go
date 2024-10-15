@@ -54,6 +54,10 @@ func ValidatePaths(paths []Path) []Path {
 	for _, path := range paths {
 		overlapScore := 0
 		totalInternalRooms := len(path.Rooms) - 2
+		if totalInternalRooms == 0 {
+			uPaths = append(uPaths, path)
+			continue
+		}
 		for _, room := range path.Rooms[1 : len(path.Rooms)-1] {
 			overlapScore += roomUsedCount[room]
 		}
