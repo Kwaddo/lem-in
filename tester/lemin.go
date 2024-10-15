@@ -129,7 +129,7 @@ func ValidatePaths(paths []Path) []Path {
 			}
 		}
 	}
-	return CullPaths(uPaths)
+	return SmallestPaths(CullPaths(uPaths))
 }
 
 func CullPaths(paths []Path) []Path {
@@ -156,6 +156,19 @@ func CullPaths(paths []Path) []Path {
 		}
 	}
 	return culledPaths
+}
+
+func SmallestPaths(paths []Path) []Path {
+	var sPaths []Path
+	for _, path := range paths {
+		if len(path.Rooms) == 2 || len(path.Rooms) == 3 {
+			sPaths = append(sPaths, path)
+			break
+		} else {
+			sPaths = append(sPaths, path)
+		}
+	}
+	return sPaths
 }
 
 func MoveAnts(antAmount int, paths []Path) []string {
