@@ -45,12 +45,7 @@ func main() {
 		}
 
 		paths := graph.FindPaths(rooms)
-
 		allMovement := MoveAnts(ants, paths)
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
 		for i := 0; i < len(allMovement); i++ {
 			_, err = file.WriteString(fmt.Sprintf("%s\n", allMovement[i]))
 			if err != nil {
